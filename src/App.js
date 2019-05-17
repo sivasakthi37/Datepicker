@@ -15,43 +15,9 @@ class App extends Component {
       pickerOpen: false,
       selectedDate: null
     }
-    this.setWrapperRef = this.setWrapperRef.bind(this);
-    this.handleClickOutside = this.handleClickOutside.bind(this);
-  }
-
-  componentDidMount() {
-
-      document.addEventListener('click', this.handleClickOutside);
-    
-  }
-
-  componentWillUnmount() {
-    
-    document.removeEventListener('click', this.handleClickOutside);
-  }
-
-  /**
-   * Set the wrapper ref
-   */
-  setWrapperRef(node) {
-    console.log("node -->",node);
-    
-    this.wrapperRef = node;
-  }
-
-  /**
-   * Alert if clicked on outside of element
-   */
-  handleClickOutside(event) {
-    if (this.state.pickerOpen===true) {
-      console.log('I am triggering unneceirelly')
-      if (this.wrapperRef && !this.wrapperRef.contains(event.target)) {
-        this.setState({ pickerOpen: false });
-      }
-
-    }
    
   }
+
   
 
   togglePicker = () => {
@@ -61,26 +27,32 @@ class App extends Component {
   handleChange = selectedDate => {
     this.setState({ selectedDate });
   }
-
+  callbackevent = (status) => {
+    console.log("status in callback", status);
+    this.setState({ pickerOpen: status })
+  }
 
   render() {
     const { pickerOpen
       // , selectedDate 
     } = this.state;
     return (
-      <div ref={this.setWrapperRef}>
+      <div >
 
         <h1>DatePicker</h1>
         {/* <Input value={selectedDate && moment(selectedDate).format('YYYY-MM-DD')} /> */}
-        <div 
-        id="datesize"
+        <div
+          id="datesize"
         >
-         {/* <div id="datePickerWrapper"> */}
+          {/* <div id="datePickerWrapper"> */}
           <DatePicker
-           className="datepicker-component" 
-           open={pickerOpen}
-           onChange={this.handleChange}  />
-          <Button onClick={this.togglePicker} >Date</Button>  
+            className="datepicker-component"
+            open={pickerOpen}
+            onChange={this.handleChange}
+            // onOpenChange={(status) => { this.setState({ pickerOpen: status }) }}
+            onOpenChange={(status) => { this.callbackevent(status) }}
+          />
+          <Button onClick={this.togglePicker} >Date</Button>
           {/* </div> */}
         </div>
       </div>
